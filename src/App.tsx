@@ -1,14 +1,15 @@
 import React from 'react';
+import ModalProvider from './context/ModalContex';
 import HomeScreen from './Screens/HomeScreen';
 import GlobalStyle from './styles/global';
 
 
 function App() {
   return (
-    <div>
-      <GlobalStyle/>
-      <HomeScreen/>
-    </div>
+      <ModalProvider>
+        <GlobalStyle/>
+        <HomeScreen />
+      </ModalProvider>
   );
 }
 
