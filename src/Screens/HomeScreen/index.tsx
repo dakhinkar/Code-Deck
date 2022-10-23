@@ -14,12 +14,12 @@ const HomeScreenContainer = styled.div`
 
 
 const HomeScreen = () => {
-  const modalFeature = useContext(ModalContext);
-  const  isOpen = modalFeature?.isOpen;
+  const modalFeature = useContext(ModalContext)!;
+  const  isOpen = modalFeature.isOpen;
   return <HomeScreenContainer>
     <LeftPane />
     <RightPane/>
-    {isOpen && <Modal />}
+    {isOpen.popup && <Modal />}
   </HomeScreenContainer>
 
 }

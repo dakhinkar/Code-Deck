@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { IoTrashOutline } from 'react-icons/io5';
 import { BiEditAlt } from 'react-icons/bi';
 import { ModalContext } from '../../context/ModalContex';
+import { FolderContext } from '../../context/FolderContex';
 interface HeaderProps{
   readonly variant: string;
 }
@@ -71,7 +72,7 @@ const AddButton = styled.button`
 `;
 
 const Folder = styled.div`
-  display :flex;
+  margin-bottom: 1rem;
 `;
 
 const CardContainer = styled.div`
@@ -109,188 +110,96 @@ const Icons = styled.div`
 
 
 const RightPane = () => {
-  const modalFeature = useContext(ModalContext);
-  const setIsOpen = modalFeature?.setIsOpen;
+  const modalFeature = useContext(ModalContext)!;
+  const setIsOpen = modalFeature.setIsOpen;
+
+  const FolderFeature = useContext(FolderContext)!;
+  const folders = FolderFeature.folders;
+  // const folders = {
+  //   ["1"]: {
+  //     title: "Data Structure",
+  //     items: {
+  //       "cardId-1": {
+  //         title: "Stack implementation",
+  //         language: "c++"
+  //       },
+  //        "cardId-2": {
+  //         title: "queue implementation",
+  //         language: "c++"
+  //       },
+  //         "cardId-3": {
+  //         title: "3 implementation",
+  //         language: "c++"
+  //       }
+  //     }
+  //   },
+  //   ["2"]: {
+  //     title: "Folder2",
+  //     items: {
+  //       "cardId-4": {
+  //         title: "Stack implementation",
+  //         language: "c++"
+  //       },
+  //        "cardId-5": {
+  //         title: "queue implementation",
+  //         language: "c++"
+  //       },
+  //         "cardId-6": {
+  //         title: "3 implementation",
+  //         language: "c++"
+  //       }
+  //     }
+  //   }
+  // }
+
   return (
     <StyledRightPane>
       <Header variant='main'>
         <Heading size="large" >My <span>Playground </span></Heading>
         <AddButton ><span>+</span> New playground</AddButton>
       </Header>
-      <div className="folder">
-        <Header variant='folder'>
-          <Heading size="small">Data Structure</Heading>
-          <AddButton className="addButtton">
-            <span>+</span> New Playground
-          </AddButton>
-        </Header>
-        <CardContainer>
-          <Card>
-            <SmallLogo src="/logo-small.png" alt="logo" />
-            <CardContent>
-              <h5>Stack implementation</h5>
-              <p>Langauge: c++</p>
-            </CardContent>
-            <Icons>
-              <IoTrashOutline /> 
-              <BiEditAlt onClick={() => {
-                if(setIsOpen) setIsOpen(true)
-              }}/>
-            </Icons>
-          </Card>
-           <Card>
-            <SmallLogo src="/logo-small.png" alt="logo" />
-            <CardContent>
-              <h5>Stack implementation</h5>
-              <p>Langauge: c++</p>
-            </CardContent>
-            <Icons>
-              <IoTrashOutline /> 
-              <BiEditAlt/>
-            </Icons>
-          </Card>
-           <Card>
-            <SmallLogo src="/logo-small.png" alt="logo" />
-            <CardContent>
-              <h5>Stack implementation</h5>
-              <p>Langauge: c++</p>
-            </CardContent>
-            <Icons>
-              <IoTrashOutline /> 
-              <BiEditAlt/>
-            </Icons>
-          </Card>
-        </CardContainer>
-      </div>
-      <div className="folder">
-        <Header variant='folder'>
-          <Heading size="small">Data Structure</Heading>
-          <AddButton className="addButtton">
-            <span>+</span> New Playground
-          </AddButton>
-        </Header>
-        <CardContainer>
-          <Card>
-            <SmallLogo src="/logo-small.png" alt="logo" />
-            <CardContent>
-              <h5>Stack implementation</h5>
-              <p>Langauge: c++</p>
-            </CardContent>
-            <Icons>
-              <IoTrashOutline /> 
-              <BiEditAlt/>
-            </Icons>
-          </Card>
-           <Card>
-            <SmallLogo src="/logo-small.png" alt="logo" />
-            <CardContent>
-              <h5>Stack implementation</h5>
-              <p>Langauge: c++</p>
-            </CardContent>
-            <Icons>
-              <IoTrashOutline /> 
-              <BiEditAlt/>
-            </Icons>
-          </Card>
-           <Card>
-            <SmallLogo src="/logo-small.png" alt="logo" />
-            <CardContent>
-              <h5>Stack implementation</h5>
-              <p>Langauge: c++</p>
-            </CardContent>
-            <Icons>
-              <IoTrashOutline /> 
-              <BiEditAlt/>
-            </Icons>
-          </Card>
-        </CardContainer>
-      </div>
-      <div className="folder">
-        <Header variant='folder'>
-          <Heading size="small">Data Structure</Heading>
-          <AddButton className="addButtton">
-            <span>+</span> New Playground
-          </AddButton>
-        </Header>
-        <CardContainer>
-          <Card>
-            <SmallLogo src="/logo-small.png" alt="logo" />
-            <CardContent>
-              <h5>Stack implementation</h5>
-              <p>Langauge: c++</p>
-            </CardContent>
-            <Icons>
-              <IoTrashOutline /> 
-              <BiEditAlt/>
-            </Icons>
-          </Card>
-           <Card>
-            <SmallLogo src="/logo-small.png" alt="logo" />
-            <CardContent>
-              <h5>Stack implementation</h5>
-              <p>Langauge: c++</p>
-            </CardContent>
-            <Icons>
-              <IoTrashOutline /> 
-              <BiEditAlt/>
-            </Icons>
-          </Card>
-           <Card>
-            <SmallLogo src="/logo-small.png" alt="logo" />
-            <CardContent>
-              <h5>Stack implementation</h5>
-              <p>Langauge: c++</p>
-            </CardContent>
-            <Icons>
-              <IoTrashOutline /> 
-              <BiEditAlt/>
-            </Icons>
-          </Card>
-        </CardContainer>
-      </div>
-      <div className="folder">
-        <Header variant='folder'>
-          <Heading size="small">Data Structure</Heading>
-          <AddButton className="addButtton">
-            <span>+</span> New Playground
-          </AddButton>
-        </Header>
-        <CardContainer>
-          <Card>
-            <SmallLogo src="/logo-small.png" alt="logo" />
-            <CardContent>
-              <h5>Stack implementation</h5>
-              <p>Langauge: c++</p>
-            </CardContent>
-            <Icons>
-              <IoTrashOutline /> 
-              <BiEditAlt/>
-            </Icons>
-          </Card>
-           <Card>
-            <SmallLogo src="/logo-small.png" alt="logo" />
-            <CardContent>
-              <h5>Stack implementation</h5>
-              <p>Langauge: c++</p>
-            </CardContent>
-            <Icons>
-              <IoTrashOutline /> 
-              <BiEditAlt/>
-            </Icons>
-          </Card>
-           <Card>
-            <SmallLogo src="/logo-small.png" alt="logo" />
-            <CardContent>
-              <h5>Stack implementation</h5>
-              <p>Langauge: c++</p>
-            </CardContent>
-            <Icons>
-              <IoTrashOutline /> 
-              <BiEditAlt/>
-            </Icons>
-          </Card>
-        </CardContainer>
-      </div>
+      {
+        Object.entries(folders).map(([folderId, folder]) => (  
+          <Folder>
+            <Header variant='folder'>
+                  <Heading size="small">{ folder.title}</Heading>
+              <AddButton className="addButtton">
+                <span>+</span> New Playground
+              </AddButton>
+            </Header>
+            <CardContainer>
+               {
+                  Object.entries(folder.items).map(([cardId, card]) => (
+                      <Card>
+                        <SmallLogo src="/logo-small.png" alt="logo" />
+                        <CardContent>
+                        <h5>{ card.title }</h5>
+                        <p>Langauge: { card.language}</p>
+                        </CardContent>
+                        <Icons>
+                          <IoTrashOutline /> 
+                          <BiEditAlt onClick={() => {
+                          setIsOpen(
+                            {
+                              popup: true,
+                              type: "card-edit",
+                              indentifier: {
+                                folderId: folderId,
+                                cardId : cardId
+                              }
+                             })
+                          }}/>
+                        </Icons>
+                      </Card>
+                  ))
+                }
+            </CardContainer>
+          </Folder>
+        
+
+        ) ) 
+      }
+      
     </StyledRightPane>
   )
 }
