@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { IoTrashOutline } from 'react-icons/io5';
 import { BiEditAlt } from 'react-icons/bi';
 import { ModalContext } from '../../context/ModalContex';
-import { FolderContext } from '../../context/FolderContex';
+import { PlaygroundContext } from '../../context/PlaygroundContex';
 interface HeaderProps{
   readonly variant: string;
 }
@@ -106,66 +106,72 @@ const Icons = styled.div`
   display: flex;
   gap: 0.5rem;
   font-size: 1.2rem;
+  align-items: center;
 `;
+// 1 create Folder;
+// 2 create playgound
+// 3 edit Folder 
+// 4 edit Playground
+
 
 
 const RightPane = () => {
   const modalFeature = useContext(ModalContext)!;
-  const setIsOpen = modalFeature.setIsOpen;
+  const {openModal} = modalFeature;
 
-  const FolderFeature = useContext(FolderContext)!;
-  const folders = FolderFeature.folders;
-  // const folders = {
-  //   ["1"]: {
-  //     title: "Data Structure",
-  //     items: {
-  //       "cardId-1": {
-  //         title: "Stack implementation",
-  //         language: "c++"
-  //       },
-  //        "cardId-2": {
-  //         title: "queue implementation",
-  //         language: "c++"
-  //       },
-  //         "cardId-3": {
-  //         title: "3 implementation",
-  //         language: "c++"
-  //       }
-  //     }
-  //   },
-  //   ["2"]: {
-  //     title: "Folder2",
-  //     items: {
-  //       "cardId-4": {
-  //         title: "Stack implementation",
-  //         language: "c++"
-  //       },
-  //        "cardId-5": {
-  //         title: "queue implementation",
-  //         language: "c++"
-  //       },
-  //         "cardId-6": {
-  //         title: "3 implementation",
-  //         language: "c++"
-  //       }
-  //     }
-  //   }
-  // }
+  const PlaygroundFeature = useContext(PlaygroundContext)!;
+  const { folders,deleteFolder,deletePlayground } = PlaygroundFeature;
+  
+
 
   return (
     <StyledRightPane>
       <Header variant='main'>
         <Heading size="large" >My <span>Playground </span></Heading>
-        <AddButton ><span>+</span> New playground</AddButton>
+        <AddButton
+          onClick={() => {
+            openModal({
+              popup: true,
+              type: "1",
+              indentifier: {
+                folderId: "",
+                cardId: ""
+              }
+            })
+        }} ><span>+</span> New playground</AddButton>
       </Header>
       {
         Object.entries(folders).map(([folderId, folder]) => (  
           <Folder>
             <Header variant='folder'>
-                  <Heading size="small">{ folder.title}</Heading>
-              <AddButton className="addButtton">
-                <span>+</span> New Playground
-              </AddButton>
+              <Heading size="small">{folder.title}</Heading>
+               <Icons>
+                  <IoTrashOutline onClick={() => deleteFolder(folderId)} /> 
+                  <BiEditAlt  onClick={() => {
+                      openModal({
+                        popup: true,
+                        type: "3",
+                        indentifier: {
+                          folderId: folderId,
+                          cardId: ""
+                        }
+                      })
+                  }} />
+                  <AddButton
+                    onClick={() => {
+                        openModal({
+                            popup: true,
+                            type: "2",
+                            indentifier: {
+                              folderId: folderId,
+                              cardId: ""
+                            }
+                          })
+                      }}>
+                      <span>+</span> New Playground
+                  </AddButton>
+                </Icons>
+               
             </Header>
             <CardContainer>
                {
@@ -177,26 +183,24 @@ const RightPane = () => {
                         <p>Langauge: { card.language}</p>
                         </CardContent>
                         <Icons>
-                          <IoTrashOutline /> 
+                          <IoTrashOutline onClick={() => deletePlayground(folderId, cardId)}/> 
                           <BiEditAlt onClick={() => {
-                          setIsOpen(
-                            {
-                              popup: true,
-                              type: "card-edit",
-                              indentifier: {
-                                folderId: folderId,
-                                cardId : cardId
-                              }
-                             })
-                          }}/>
+                            openModal(
+                              {
+                                popup: true,
+                                type: "4",
+                                indentifier: {
+                                  folderId: folderId,
+                                  cardId : cardId
+                                }
+                                })
+                            }}/>
                         </Icons>
                       </Card>
                   ))
                 }
             </CardContainer>
           </Folder>
-        
-
         ) ) 
       }
       

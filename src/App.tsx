@@ -1,5 +1,5 @@
 import React from 'react';
-import FolderProvider from './context/FolderContex';
+import FolderProvider from './context/PlaygroundContex';
 import ModalProvider from './context/ModalContex';
 import HomeScreen from './Screens/HomeScreen';
 import GlobalStyle from './styles/global';

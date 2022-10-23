@@ -3,7 +3,11 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { RiCloseFill } from 'react-icons/ri';
 import { ModalContext } from '../context/ModalContex';
-import { FolderContext } from '../context/FolderContex';
+import { PlaygroundContext } from '../context/PlaygroundContex';
+import CreateFolder from './modal-type/CreateFolder';
+import CreatePlayground from './modal-type/CreatePlayground';
+import EditFolder from './modal-type/EditFolder';
+import EditPlayground from './modal-type/EditPlayground';
  
 const ModalContainer = styled.div`
     background: rgba(0,0,0,0.4);
@@ -28,13 +32,13 @@ const ModalContanet = styled.div`
     border-radius: 5px;
 `;
 
-const Header = styled.div`
+export const Header = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
 `;
 
-const CloseButton = styled.button`
+export const CloseButton = styled.button`
     background: transparent;
     outline:0;
     border: 0;
@@ -71,7 +75,9 @@ const Input = styled.div`
     }
 `;
 
-const EditModal = ({ setIsOpen, isOpen, folders }: { setIsOpen: any, isOpen: any, folders:any }) => {
+
+
+const EditModal = ({ closeModal, isOpen, folders }: { closeModal: any, isOpen: any, folders:any }) => {
     const folder = folders[isOpen.indentifier.folderId];
     const cardName = folder["items"][isOpen.indentifier.cardId];
 
@@ -79,19 +85,7 @@ const EditModal = ({ setIsOpen, isOpen, folders }: { setIsOpen: any, isOpen: any
         <>
             <Header>
                 <h2>Upated folder name </h2>
-                <CloseButton onClick={
-                    () => {
-                    setIsOpen(
-                          {
-                              popup: false,
-                              type: "",
-                              indentifier: {
-                                  folderId: "",
-                                  cardId: ""
-                              }
-                          }
-                        )
-                    }}>
+                <CloseButton onClick={() => { closeModal() }}>
                       <RiCloseFill />
                 </CloseButton>
             </Header>
@@ -104,23 +98,12 @@ const EditModal = ({ setIsOpen, isOpen, folders }: { setIsOpen: any, isOpen: any
 
 }
 
-const AddModal =  ({setIsOpen , isOpen }: {setIsOpen: any, isOpen: any}) => {
+const AddModal =  ({closeModal , isOpen }: {closeModal: any, isOpen: any}) => {
     return (
         <Header>
                 <h2>Add new folder</h2>
-                <CloseButton onClick={() => {
-                    setIsOpen(
-                          {
-                              popup: false,
-                              type: "",
-                              indentifier: {
-                                  folderId: "",
-                                  cardId: ""
-                              }
-                          }
-                        )
-                    }}>
-                      <RiCloseFill />
+                <CloseButton onClick={() => { closeModal() }}>
+                    <RiCloseFill />
                 </CloseButton>
         </Header>
     )
@@ -131,17 +114,21 @@ const OthersModal = () => {
     return <div>Others Modal</div>
 }
 const Modal = () => {
-    const FolderFeature = useContext(FolderContext)!;
-    const { folders, setFolders } = FolderFeature;
+    const PlaygroundFeature = useContext(PlaygroundContext)!;
+    const { folders, setFolders } = PlaygroundFeature;
     const modalFeature = useContext(ModalContext)!;
-    const {isOpen, setIsOpen} = modalFeature;
+    const {isOpen, closeModal} = modalFeature;
 
     return (
       <ModalContainer>
           <ModalContanet>
-            {isOpen.type === "card-edit" && <EditModal setIsOpen = { setIsOpen} isOpen={isOpen} folders={folders} />}
-             {isOpen.type === "card-new" && <AddModal setIsOpen = { setIsOpen} isOpen={isOpen} />}  
-            
+            {/* {isOpen.type === "card-edit" && <EditModal closeModal = { closeModal} isOpen={isOpen} folders={folders} />}
+             {isOpen.type === "card-new" && <AddModal closeModal = { closeModal} isOpen={isOpen} />}  
+             */}
+                {isOpen.type === "1" && <CreateFolder  />}
+                {isOpen.type === "2" && <CreatePlayground />}
+                {isOpen.type === "3" && <EditFolder />}
+                 {isOpen.type === "4" && <EditPlayground/>}
           </ModalContanet>
     </ModalContainer>
   )

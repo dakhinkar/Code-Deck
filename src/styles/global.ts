@@ -9,4 +9,13 @@ export default createGlobalStyle`
         font-family: 'Play', sans-serif;
     }
 
+    a,button,svg{
+        cursor: pointer; 
+        transition : all .18s ease;
+    }
+    a:hover, button:hover, svg:hover{
+        opacity: 0.8 !;
+        scale : 1.2;
+    }
+
 `;
