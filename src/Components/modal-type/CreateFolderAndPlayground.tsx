@@ -1,3 +1,4 @@
+
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import { Header, CloseButton } from '../Modal';
@@ -19,21 +20,17 @@ const Input = styled.div`
 
     .inputContainer{
       display : flex;
+      flex-direction: column;
       align-item: center;
       justify-content: space-between;
       gap: 1rem;
       input{
-        
-        
-        flex-grow: 1;
+        width: 15rem;
         outline: none;
         padding: 0.5rem;
       }
-      .inputT{
-        height: 2.2rem;
-      }
       .select{
-        width: 8rem;
+        width: 10rem;
         height: 1.75rem;
       }
 
@@ -56,22 +53,22 @@ const Input = styled.div`
     }
 `;
 
-const CreatePlayground = () => {
+const CreateFolderAndPlayground = () => {
   const FolderFeature = useContext(PlaygroundContext)!;
   const ModalFeature = useContext(ModalContext)!;
-  const { closeModal, isOpen } = ModalFeature;
-  const { folderId } = isOpen.indentifier;
-  const { createNewPlayground, folders } = FolderFeature;
+  const { closeModal } = ModalFeature;
+  const { createNewFolderAndPlayground } = FolderFeature;
   
-  const [title, setTitle] = useState<string>("");
+    const [folderTitle, setFolderTitle] = useState<string>("");
+    const [playgoundTitle, setPlaygroundTitle] = useState<string>("");
   const [langauge, setLangauge] = useState<{ value: string, label: string }>(languageOptions[0]);
   
   const langaugeChangeHandler = (select: any) => {
     setLangauge(select);
   }
   const CreateHandler = () => {
-    if (title.trim().length > 0) {
-      createNewPlayground(folderId, title, langauge.value );
+    if (folderTitle.trim().length > 0 && playgoundTitle.trim().length > 0 ) {
+      createNewFolderAndPlayground(folderTitle, playgoundTitle, langauge.value);
        closeModal();
     }
       
@@ -80,27 +77,30 @@ const CreatePlayground = () => {
   return (
     <>
       <Header>
-        <h2>Create New Playground </h2>
+        <h2>Create Folder & Playground</h2>
         <CloseButton
           onClick={() => { closeModal() }}>
               <RiCloseFill />
         </CloseButton>
       </Header>
-      <Input>
-        <div className='inputContainer'>
-          <input 
-            className='inputT'
-          type="text"
-          placeholder='Enter playground title'
-          value={title}
-          onChange={(e) => setTitle(e.target.value)} />
-          <Select 
-            className='select'
-          value={langauge}
-          options={languageOptions}
-          onChange={langaugeChangeHandler}
-          />
-        </div>
+        <Input>
+            <div className='inputContainer'>
+                <input 
+                    type="text"
+                    placeholder='Enter folder title'
+                    value={folderTitle}
+                    onChange={(e) => setFolderTitle(e.target.value)} />
+                <input 
+                    type="text"
+                    placeholder='Enter playground title'
+                    value={playgoundTitle}
+                    onChange={(e) => setPlaygroundTitle(e.target.value)} />
+                <Select 
+                    className='select'
+                    value={langauge}
+                    options={languageOptions}
+                    onChange={langaugeChangeHandler}/>
+            </div>
         <button type='submit' onClick={CreateHandler}>Create</button>
       </Input>
 
@@ -108,5 +108,4 @@ const CreatePlayground = () => {
   )
 }
 
-
-export default CreatePlayground
+export default CreateFolderAndPlayground;

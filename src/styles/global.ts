@@ -1,5 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
 
+
 export default createGlobalStyle`
     *{
         margin: 0;
@@ -15,7 +16,6 @@ export default createGlobalStyle`
     }
     a:hover, button:hover, svg:hover{
         opacity: 0.8 !;
-        scale : 1.2;
     }
 
 `;

@@ -79,11 +79,13 @@ export const PlaygroundContext = createContext<PlaygroundContextType |null>(null
 export default function PlaygroundProvider({ children }: { children: any }) {
     
   const [folders, setFolders] = useState(() => {
-    let playgoundFolder = JSON.parse(localStorage.getItem('playground-folder') as string ); 
-    if (Object.keys(playgoundFolder).length === 0)
+    let playgoundFolder = JSON.parse(localStorage.getItem('playground-folder') as string);
+    if (playgoundFolder === null) {
       return initialFolders;
+    }
+    playgoundFolder = Object.keys(playgoundFolder).length === 0 ? null : playgoundFolder;
+    return playgoundFolder || initialFolders ;
     
-    return playgoundFolder ;
     });
 
     useEffect(() => {
@@ -166,7 +168,7 @@ export default function PlaygroundProvider({ children }: { children: any }) {
           editFolderTitle, editPlaygroundTitle,
           deleteFolder, deletePlayground
         }}>
-            {children};
+            {children}
         </PlaygroundContext.Provider>    
 }
 

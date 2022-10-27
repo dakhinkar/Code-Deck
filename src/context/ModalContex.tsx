@@ -41,7 +41,7 @@ export default function ModalProvider({ children }: { children: any }) {
         setIsOpen(initialModalState);
     }
     return  <ModalContext.Provider value={{isOpen, openModal, closeModal}}>
-            {children};
+            {children}
         </ModalContext.Provider>    
 }
 

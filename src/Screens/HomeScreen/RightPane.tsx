@@ -4,6 +4,7 @@ import { IoTrashOutline } from 'react-icons/io5';
 import { BiEditAlt } from 'react-icons/bi';
 import { ModalContext } from '../../context/ModalContex';
 import { PlaygroundContext } from '../../context/PlaygroundContex';
+import { useNavigate } from 'react-router-dom';
 interface HeaderProps{
   readonly variant: string;
 }
@@ -34,7 +35,7 @@ const Header = styled.div<HeaderProps>`
     width: 100%;
     height: 2px;
     background: rgba(0,0,0,0.25);
-    display : ${(props)=> props.variant === "main" ? "block" : "none"}
+    display : ${(props)=> props.variant === "main" ? "block" : "none" }
 
   }
   margin-bottom: ${(props)=> props.variant === 'main' ? "2rem" : "1rem"};
@@ -67,7 +68,7 @@ const AddButton = styled.button`
 
   &:hover{
     opacity: 0.9;
-    scale: 1.1;
+    // scale: 1.1;
   }
 `;
 
@@ -87,6 +88,13 @@ const Card = styled.div`
   padding: 0.6rem;
   gap: 1rem;
   box-shadow : 3px 4px 50px -25px rgb(0 0 0 / 75%);
+  cursor: pointer;
+  transition: all 0.5s ease;
+  &:hover{
+    opacity: 0.5;
+
+  }
+
 `;
 
 const SmallLogo = styled.img`
@@ -110,8 +118,9 @@ const Icons = styled.div`
 `;
 // 1 create Folder;
 // 2 create playgound
-// 3 edit Folder 
+// 3 edit Folder
 // 4 edit Playground
+// 5 create Folder and Playground
 
 
 
@@ -120,10 +129,9 @@ const RightPane = () => {
   const {openModal} = modalFeature;
 
   const PlaygroundFeature = useContext(PlaygroundContext)!;
-  const { folders,deleteFolder,deletePlayground } = PlaygroundFeature;
+  const { folders, deleteFolder, deletePlayground } = PlaygroundFeature;
+  const navigate = useNavigate()
   
-
-
   return (
     <StyledRightPane>
       <Header variant='main'>
@@ -137,10 +145,9 @@ const RightPane = () => {
                 folderId: "",
                 cardId: ""
               }
-            })
+            } )
         }} ><span>+</span> New playground</AddButton>
-      </Header>
-      {
+      </Header>{
         Object.entries(folders).map(([folderId, folder]) => (  
           <Folder>
             <Header variant='folder'>
@@ -175,16 +182,23 @@ const RightPane = () => {
             </Header>
             <CardContainer>
                {
-                  Object.entries(folder.items).map(([cardId, card]) => (
-                      <Card>
+                Object.entries(folder.items).map(
+                  ([cardId, card]) => (
+                    <Card onClick={() =>
+                      navigate(`/code/${folderId}/${cardId}`
+                      )}>
                         <SmallLogo src="/logo-small.png" alt="logo" />
                         <CardContent>
                         <h5>{ card.title }</h5>
                         <p>Langauge: { card.language}</p>
                         </CardContent>
                         <Icons>
-                          <IoTrashOutline onClick={() => deletePlayground(folderId, cardId)}/> 
-                          <BiEditAlt onClick={() => {
+                        <IoTrashOutline onClick={(e) => {
+                          e.stopPropagation();
+                          deletePlayground(folderId, cardId)
+                        }} /> 
+                        <BiEditAlt onClick={(e) => {
+                          e.stopPropagation();
                             openModal(
                               {
                                 popup: true,
@@ -204,8 +218,7 @@ const RightPane = () => {
         ) ) 
       }
       
-    </StyledRightPane>
-  )
+    </StyledRightPane>)
 }
 
 export default RightPane;
