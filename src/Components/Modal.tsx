@@ -9,6 +9,7 @@ import CreatePlayground from './modal-type/CreatePlayground';
 import EditFolder from './modal-type/EditFolder';
 import EditPlayground from './modal-type/EditPlayground';
 import CreateFolderAndPlayground from './modal-type/CreateFolderAndPlayground';
+import Loading from './modal-type/Loading';
  
 const ModalContainer = styled.div`
     background: rgba(0,0,0,0.4);
@@ -93,7 +94,8 @@ const Modal = () => {
                 {isOpen.type === "2" && <CreatePlayground />}
                 {isOpen.type === "3" && <EditFolder />}
                 {isOpen.type === "4" && <EditPlayground />}
-                {isOpen.type === "5" && <CreateFolderAndPlayground/>}
+                {isOpen.type === "5" && <CreateFolderAndPlayground />}
+                 {isOpen.type === "6" && <Loading/>}
           </ModalContanet>
     </ModalContainer>
   )

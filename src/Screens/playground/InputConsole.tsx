@@ -29,6 +29,25 @@ const HeaderContainer = styled.div`
     font-weight: 500;
   }
 `;
+// Import code, testcases
+const ImportCode = styled.label`
+  display: flex;
+  align-items: center;
+  border: none;
+  outline:none;
+  gap: 8px;
+  font-size: 1.1rem;
+  font-weight: 400;
+  background-color: transparent;
+  cursor: pointer;
+  svg{
+    font-size: 1rem;
+  }
+  input{
+    display: none;
+  }
+
+`
 
 const Button = styled.button`
   display: flex;
@@ -56,18 +75,64 @@ const TextArea = styled.textarea`
   background-color: white;
 `;
 
-const InputConsole = () => {
+interface InputConsoleProps{
+  testCase: string,
+  testCaseHandler: (test :string) => void,
+}
+
+const InputConsole: React.FC<InputConsoleProps> = ({ testCase, testCaseHandler }) => {
+  // get file
+
+  const getFile = (e: any) => {
+    
+    let input = e.target;
+    if ("files" in input && input.files.length > 0) {
+      placeFileContent(input.files[0]);
+    }
+    
+  };
+
+  const placeFileContent = (file: any) => {
+       readFileContent(file)
+      .then((content) => {
+        testCaseHandler(content as string);
+      })
+      .catch((error) => console.log(error));
+  }
+  const readFileContent = (file: any) => {
+    const reader = new FileReader();
+    return new Promise((resolve, reject) => {
+      reader.onload = (event) => resolve(event!.target!.result);
+      reader.onerror = (error) => reject(error);
+      reader.readAsText(file);
+    });
+  }
+
+  const saveIntoFile = () => {
+    async function getNewFileHandle() {
+  const opts = {
+    types: [{
+      description: 'Text file',
+      accept: {'text/plain': ['.txt']},
+    }],
+  };
+  return await window.showSaveFilePicker(opts);
+}
+
+  }
+
   return <Input>
     <Header>
       <HeaderContainer>
         <h2>Input: </h2>
-        <Button>
+         <ImportCode>
+          <input type="file" accept=".txt" onChange={(e) => getFile(e)} />
           <CgImport />
-          <span>Import test</span>
-        </Button>
+          <span>Import test </span>
+        </ImportCode>
       </HeaderContainer>    
     </Header>    
-    <TextArea/>
+    <TextArea value={testCase} onChange={(e) => testCaseHandler(e.target.value)}/>
   </Input>
 };
 

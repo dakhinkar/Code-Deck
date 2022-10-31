@@ -5,9 +5,10 @@ import EditFolder from "../../Components/modal-type/EditFolder";
 import Editor from "./Editor";
 import InputConsole from "./InputConsole";
 import OutputConsole from "./OutputConsole";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { ModalContext } from "../../context/ModalContex";
 import Modal from "../../Components/Modal";
+import { PlaygroundContext } from "../../context/PlaygroundContex";
 
 
 
@@ -62,10 +63,29 @@ const Console = styled.div`
     background-color: white;
 `;
 
+interface OutputProps{
+    color: string,
+    message: string
+}
+
 const Playground = () => {
     const ModalFeature = useContext(ModalContext)!;
-    const { isOpen} = ModalFeature;
+    const PlaygroundFeature = useContext(PlaygroundContext)!;
+    const { folders } = PlaygroundFeature;
+    const { isOpen, closeModal} = ModalFeature;
     const navigate = useNavigate();
+    
+    const [testCase, setTestCases] = useState<string>("");
+    const [output, setOutput] = useState<OutputProps>({color: "green", message: ""});
+
+    const testCaseHandler = (test: string) => {
+        setTestCases(test);
+    }
+
+    const outputHandler = ({color, message}:{color: string,message: string}) => {
+        setOutput({color, message});
+    }
+
     return (
         <PlaygroundC>
             {isOpen.popup && <Modal/>}
@@ -76,10 +96,10 @@ const Playground = () => {
                 </HeaderContainer>    
             </Header>
             <PlaygroundContainer>
-                <Editor />
+                <Editor testCase={testCase} outputHandler={outputHandler}/>
                 <Console>
-                    <InputConsole />
-                    <OutputConsole />
+                    <InputConsole testCase={testCase} testCaseHandler ={testCaseHandler} />
+                    <OutputConsole output={output}/>
                 </Console>
             </PlaygroundContainer>
         </PlaygroundC>

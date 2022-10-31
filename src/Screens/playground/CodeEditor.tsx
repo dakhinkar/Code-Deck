@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import CodeMirror, { basicSetup } from '@uiw/react-codemirror';
 
@@ -14,7 +14,10 @@ import { duotoneLight, duotoneDark } from '@uiw/codemirror-theme-duotone';
 import { githubLight, githubDark } from '@uiw/codemirror-theme-github';
 import { okaidia } from '@uiw/codemirror-theme-okaidia';
 import styled from "styled-components";
-
+import { config } from "process";
+import { modeOptions } from "./Editor";
+import { indentUnit } from "@codemirror/language";
+import { EditorState } from "@codemirror/state";
 const EditorContainer = styled.div`
   height: 100%;
   flex-grow: 1;
@@ -25,14 +28,81 @@ const EditorContainer = styled.div`
 
 `;
 
-const CodeEditor = () => {
-  const [lang , setLang] = useState(java);
-  const [mode, setMode] = useState(duotoneDark);
+interface CodeEditorProps{
+  langauge: string;
+  theamMode: string;
+  currentCode: string;
+  codeChangeHandler: (selected: string) => void;
+}
+
+
+
+
+const CodeEditor: React.FC<CodeEditorProps>  = ({langauge, theamMode,currentCode, codeChangeHandler }) => {
+  const [currentLang , setCurrentLang] = useState(java);
+  const [currnetMode, setCurrnetMode] = useState(duotoneDark);
+
+  
+
+  useEffect(() => { 
+    if (langauge === 'c++') {
+      setCurrentLang(cpp);
+    }
+     if (langauge === 'java') {
+      setCurrentLang(java);
+    }
+     if (langauge === 'javascript') {
+      setCurrentLang(javascript());
+    }
+     if (langauge === 'python') {
+      setCurrentLang(python);
+    }
+    if (langauge === 'php') {
+      setCurrentLang(php());
+    }
+
+  }, [langauge])
+  useEffect(() => {
+    
+    if (theamMode === 'bespin') {
+      setCurrnetMode(bespin)
+    }
+    if (theamMode === 'darcula') {
+      setCurrnetMode(darcula)
+    }
+    if (theamMode === 'duotoneLight') {
+      setCurrnetMode(duotoneLight)
+    }
+    if (theamMode === 'duotoneDark') {
+      setCurrnetMode(duotoneDark)
+    }
+    if (theamMode === 'githubLight') {
+      setCurrnetMode(githubLight)
+    }
+    if (theamMode === 'githubDark') {
+      setCurrnetMode(githubDark)
+    }
+    if (theamMode === 'okaidia') {
+      setCurrnetMode(okaidia)
+    }
+
+  }, [theamMode])
+
+
    return <EditorContainer>
      <CodeMirror
-       theme={mode}
+       value={currentCode}
+       onChange={(e) => {
+         console.log(e);
+         codeChangeHandler(e)
+       }}
+       theme={currnetMode}
        height={"100%"}
-      extensions={[lang]}      
+       extensions={[currentLang,
+         indentUnit.of("        "),
+          EditorState.tabSize.of(8),
+         EditorState.changeFilter.of(() => true),
+       ]}      
       basicSetup={{
           lineNumbers: true,
           highlightActiveLineGutter: false,

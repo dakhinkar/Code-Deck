@@ -3,11 +3,12 @@ import { v4 as uuid } from 'uuid';
 
 interface PlaygroundFeilds{
     [key:string]: {
-        title: string;
-        items: {
+        title: string;            // folder title
+        items: {                  // each playground
             [key: string]: {
-                title: string;
-                language: string;
+                title: string;    // playgrund title
+                language: string; // language
+                code: string;     // code
             }
         }
     }
@@ -23,7 +24,8 @@ interface PlaygroundContextType  {
     editPlaygroundTitle: (folderId: string, cardId: string, playgroundTitle: string) => void;
     editFolderTitle: (folderId: string, folderTitle: string ) => void;
     deletePlayground: (folderId: string, cardId: string)=> void;
-    deleteFolder: (folderId: string)=> void;
+    deleteFolder: (folderId: string) => void;
+    saveCode: (folderId: string, cardId: string, langauge: string, code: string) => void;
         
 }
 
@@ -33,35 +35,11 @@ let initialFolders = {
       items: {
         [uuid()]: {
           title: "Stack implementation",
-          language: "c++"
+          language: "c++",
+          code: ""
         },
-        [uuid()]: {
-          title: "queue implementation",
-          language: "c++"
-        },
-        [uuid()]: {
-          title: "3 implementation",
-          language: "c++"
-        }
       }
     },
-    [uuid()]: {
-      title: "Folder2",
-      items: {
-        [uuid()]: {
-          title: "Stack implementation",
-          language: "c++"
-        },
-        [uuid()]: {
-          title: "queue implementation",
-          language: "c++"
-        },
-        [uuid()]: {
-          title: "3 implementation",
-          language: "c++"
-        }
-      }
-    }
     }
 
 // CreateNewFolder(folderTitle);
@@ -71,7 +49,7 @@ let initialFolders = {
 // EditFolderTitle(folderId,folderTitle )
 // DeletePlayground(folderId, cardId)
 // DeleteFolder(folderId);
-
+// SaveCode = (folderId, cardId, langauge, code) => {}
 
 
 export const PlaygroundContext = createContext<PlaygroundContextType |null>(null);
@@ -108,7 +86,8 @@ export default function PlaygroundProvider({ children }: { children: any }) {
       const newFolder = { ...oldFolder };
       newFolder[folderId].items[uuid()] = {
         title: playgroundTitle,
-        language: pLangauge
+        language: pLangauge,
+        code: "",
       };
       return newFolder;
     })
@@ -122,7 +101,8 @@ export default function PlaygroundProvider({ children }: { children: any }) {
         items: {
           [uuid()]: {
             title: playgroundTitle,
-            language: pLangauge
+            language: pLangauge,
+            code: "",
           }
         }
       };
@@ -160,13 +140,30 @@ export default function PlaygroundProvider({ children }: { children: any }) {
       return newFolder;
     })
   }
-    return <PlaygroundContext.Provider
+  
+  const saveCode = (folderId: string, cardId: string, langauge: string, code: string) => {
+    setFolders((oldFolder: any) => {
+      const newFolder = { ...oldFolder };
+      newFolder[folderId].items[cardId].code = code;
+      newFolder[folderId].items[cardId].language = langauge;
+      return newFolder;
+    })
+  }
+  
+  
+  return <PlaygroundContext.Provider
       value={
         {
-          folders, setFolders,
-          createNewFolder, createNewPlayground, createNewFolderAndPlayground,
-          editFolderTitle, editPlaygroundTitle,
-          deleteFolder, deletePlayground
+          folders,
+          setFolders,
+          createNewFolder,
+          createNewPlayground,
+          createNewFolderAndPlayground,
+          editFolderTitle,
+          editPlaygroundTitle,
+          deleteFolder,
+          deletePlayground,
+          saveCode,
         }}>
             {children}
         </PlaygroundContext.Provider>    

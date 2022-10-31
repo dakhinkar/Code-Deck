@@ -47,16 +47,20 @@ const Button = styled.button`
 
   }
 `;
-const OutputArea = styled.div`
+const OutputArea = styled.textarea`
   flex-grow: 1;
-  
+  grow: none;
+  border: none;
   outline: none;
   padding: 5px;
   background-color: white;
-  border-left: 1px solid gray;
 `;
 
-const OutputConsole = () => {
+interface OutputConsoleProps{
+  output:{color: string, message: string},
+}
+
+const OutputConsole: React.FC<OutputConsoleProps> = ({output}) => {
   return <Input>
     <Header>
       <HeaderContainer>
@@ -67,7 +71,7 @@ const OutputConsole = () => {
         </Button>
       </HeaderContainer>    
     </Header>    
-    <OutputArea/>
+    <OutputArea disabled value={output.message} style={{color: output.color}}/>
   </Input>
 };
 
