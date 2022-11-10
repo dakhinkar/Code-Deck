@@ -9,6 +9,7 @@ import { ModalContext } from "../../context/ModalContex";
 import { useParams } from "react-router-dom";
 import { PlaygroundContext } from "../../context/PlaygroundContex";
 import axios from "axios";
+import { readFileContent, writeFile, getNewFileHandle} from './fs-helper';
 // import { Buffer, TypedArrays } from '@react-frontend-developer/buffers';
 import { Buffer } from "buffer";
 
@@ -17,10 +18,9 @@ const EditorContainer = styled.div`
   flex-direction: column;
   background-color: white;
 
-  & > div: nth-of-type(2){
+  & > div:nth-of-type(2){
     height: calc(100vh - 12.5rem);
-  }
-  `;
+  }`;
 
 const UpperToolBar = styled.div`
   height: 4rem; 
@@ -307,10 +307,11 @@ const Editor: React.FC<EditorProps> = ({testCase, outputHandler}) => {
         cardId: ""
       }
     });
+    
     const data = await getToken() ;
     // console.log(data);
     const output = await getOutput(data.token);
-    console.log(output);
+    
     let outputStd = output.status.description;
 
     if (output.status.id === 3) {
@@ -323,18 +324,14 @@ const Editor: React.FC<EditorProps> = ({testCase, outputHandler}) => {
       color: output.status.id === 3 ? "green" : "red",
       message: outputStd as string
     }
-    // if(output.s)
-    
-    // console.log(outputStd);
-    // console.log("code run completely...");
-  outputHandler(resultOutput);
+    outputHandler(resultOutput);
     closeModal(); // close loading modal
   }
   
 
+  // Import Functionality
 
   // get file
-
   const getFile = (e: any) => {
     
     let input = e.target;
@@ -343,7 +340,7 @@ const Editor: React.FC<EditorProps> = ({testCase, outputHandler}) => {
     }
     
   };
-
+  //  set imported code to current code
   const placeFileContent = (file: any) => {
        readFileContent(file)
       .then((content) => {
@@ -351,15 +348,20 @@ const Editor: React.FC<EditorProps> = ({testCase, outputHandler}) => {
       })
       .catch((error) => console.log(error));
   }
-  const readFileContent = (file: any) => {
-    const reader = new FileReader();
-    return new Promise((resolve, reject) => {
-      reader.onload = (event) => resolve(event!.target!.result);
-      reader.onerror = (error) => reject(error);
-      reader.readAsText(file);
-    });
+ 
+  // Export functionality
+  // save to local system
+  const saveIntoFile = async () => {
+    // CREATE NEW FILE
+    const handle = await getNewFileHandle();
+    // written to file
+     await writeFile(handle, currentCode);
   }
 
+  // Full Screen Functionality
+  const fullScreenHandler = () => {
+     document.documentElement.requestFullscreen();
+  }
   
   return( <EditorContainer>
     <UpperToolBar>
@@ -398,13 +400,15 @@ const Editor: React.FC<EditorProps> = ({testCase, outputHandler}) => {
     <CodeEditor langauge ={currentLanguage.value} theamMode={theamMode.value} currentCode={currentCode} codeChangeHandler={codeChangeHandler} />
     <LowerToolBar >
       <ButtonGroup>
-        <Button> <BsFullscreen/><span>Full Screen </span></Button>
+        <Button onClick={fullScreenHandler}> <BsFullscreen/><span>Full Screen </span></Button>
         <ImportCode>
           <input type="file" accept=".txt" onChange={(e) => getFile(e)} />
           <CgImport />
           <span>Import code </span>
         </ImportCode>
-        <Button> <CgExport/> <span>Export code</span> </Button>
+        <Button onClick={saveIntoFile}>
+          <CgExport /> <span>Export code</span>
+        </Button>
        
       </ButtonGroup>
       <RunCode onClick={runCodeHandler} >

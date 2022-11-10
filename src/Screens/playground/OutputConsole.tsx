@@ -1,7 +1,7 @@
 import React from "react";
 import { CgExport } from "react-icons/cg";
 import styled from "styled-components";
-
+import {  writeFile, getNewFileHandle} from './fs-helper';
 const Input = styled.div`
   height: 50%;
   display: flex;
@@ -49,7 +49,6 @@ const Button = styled.button`
 `;
 const OutputArea = styled.textarea`
   flex-grow: 1;
-  grow: none;
   border: none;
   outline: none;
   padding: 5px;
@@ -60,12 +59,19 @@ interface OutputConsoleProps{
   output:{color: string, message: string},
 }
 
-const OutputConsole: React.FC<OutputConsoleProps> = ({output}) => {
+
+const OutputConsole: React.FC<OutputConsoleProps> = ({ output }) => {
+ 
+  // Save to console output to local system
+  const outputSaveHandler = async () => {
+    const handle = await getNewFileHandle();
+    await writeFile(handle, output.message);
+  }
   return <Input>
     <Header>
       <HeaderContainer>
         <h2>Output: </h2>
-        <Button>
+        <Button onClick={outputSaveHandler}>
           <CgExport />
           <span>Export Output</span>
         </Button>

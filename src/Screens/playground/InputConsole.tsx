@@ -116,7 +116,8 @@ const InputConsole: React.FC<InputConsoleProps> = ({ testCase, testCaseHandler }
       accept: {'text/plain': ['.txt']},
     }],
   };
-  return await window.showSaveFilePicker(opts);
+      window.example = "Hello";
+      console.log(window.example);
 }
 
   }
